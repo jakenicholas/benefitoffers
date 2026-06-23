@@ -1,0 +1,219 @@
+{
+  "_note": "Placeholder benefit sets for common cards. Amounts/cadences are approximate — every benefit is flagged 'verify': true. Correct them against your own card's current terms before relying on them.",
+  "version": 1,
+  "cards": [
+    {
+      "id": "card_amex_platinum",
+      "name": "Amex Platinum",
+      "issuer": "American Express",
+      "annualFee": 695,
+      "last4": "",
+      "anniversaryMonth": null
+    },
+    {
+      "id": "card_amex_gold",
+      "name": "Amex Gold",
+      "issuer": "American Express",
+      "annualFee": 325,
+      "last4": "",
+      "anniversaryMonth": null
+    },
+    {
+      "id": "card_csr",
+      "name": "Chase Sapphire Reserve",
+      "issuer": "Chase",
+      "annualFee": 550,
+      "last4": "",
+      "anniversaryMonth": null
+    },
+    {
+      "id": "card_csp",
+      "name": "Chase Sapphire Preferred",
+      "issuer": "Chase",
+      "annualFee": 95,
+      "last4": "",
+      "anniversaryMonth": null
+    }
+  ],
+  "benefits": [
+    {
+      "id": "ben_plat_airline",
+      "cardId": "card_amex_platinum",
+      "name": "Airline Fee Credit",
+      "description": "Incidental fees on one selected airline (bag fees, seat upgrades).",
+      "amount": 200,
+      "cadence": "annual",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_plat_hotel",
+      "cardId": "card_amex_platinum",
+      "name": "Hotel Credit",
+      "description": "Prepaid Fine Hotels + Resorts or The Hotel Collection bookings.",
+      "amount": 200,
+      "cadence": "annual",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_plat_uber",
+      "cardId": "card_amex_platinum",
+      "name": "Uber Cash",
+      "description": "Monthly Uber/Uber Eats credit (often a bonus in December).",
+      "amount": 15,
+      "cadence": "monthly",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_plat_saks",
+      "cardId": "card_amex_platinum",
+      "name": "Saks Credit",
+      "description": "Saks Fifth Avenue purchases, twice a year (Jan–Jun, Jul–Dec).",
+      "amount": 50,
+      "cadence": "semiannual",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_plat_entertainment",
+      "cardId": "card_amex_platinum",
+      "name": "Digital Entertainment Credit",
+      "description": "Select streaming/news subscriptions.",
+      "amount": 20,
+      "cadence": "monthly",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_plat_clear",
+      "cardId": "card_amex_platinum",
+      "name": "CLEAR Plus Credit",
+      "description": "CLEAR Plus membership.",
+      "amount": 189,
+      "cadence": "annual",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_gold_dining",
+      "cardId": "card_amex_gold",
+      "name": "Dining Credit",
+      "description": "Select dining partners (Grubhub, etc.), monthly.",
+      "amount": 10,
+      "cadence": "monthly",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_gold_uber",
+      "cardId": "card_amex_gold",
+      "name": "Uber Cash",
+      "description": "Monthly Uber/Uber Eats credit.",
+      "amount": 10,
+      "cadence": "monthly",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_gold_resy",
+      "cardId": "card_amex_gold",
+      "name": "Resy Credit",
+      "description": "Resy restaurant purchases, twice a year.",
+      "amount": 50,
+      "cadence": "semiannual",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_gold_dunkin",
+      "cardId": "card_amex_gold",
+      "name": "Dunkin' Credit",
+      "description": "Monthly Dunkin' purchases.",
+      "amount": 7,
+      "cadence": "monthly",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_csr_travel",
+      "cardId": "card_csr",
+      "name": "Travel Credit",
+      "description": "Statement credit applied to the first travel purchases each cardmember year.",
+      "amount": 300,
+      "cadence": "annual",
+      "resetBasis": "cardmember_year",
+      "usedThisPeriod": 0,
+      "notes": "Set this card's anniversary month so the reset date is right.",
+      "verify": true
+    },
+    {
+      "id": "ben_csr_doordash",
+      "cardId": "card_csr",
+      "name": "DoorDash Credit",
+      "description": "Monthly DoorDash promo/credit.",
+      "amount": 5,
+      "cadence": "monthly",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    },
+    {
+      "id": "ben_csp_hotel",
+      "cardId": "card_csp",
+      "name": "Hotel Credit",
+      "description": "Annual hotel credit on Chase Travel bookings.",
+      "amount": 50,
+      "cadence": "annual",
+      "resetBasis": "cardmember_year",
+      "usedThisPeriod": 0,
+      "notes": "Set this card's anniversary month so the reset date is right.",
+      "verify": true
+    },
+    {
+      "id": "ben_csp_doordash",
+      "cardId": "card_csp",
+      "name": "DoorDash Credit",
+      "description": "Monthly DoorDash promo/credit.",
+      "amount": 5,
+      "cadence": "monthly",
+      "resetBasis": "calendar",
+      "usedThisPeriod": 0,
+      "notes": "",
+      "verify": true
+    }
+  ],
+  "offers": [
+    {
+      "id": "offer_sample",
+      "cardId": "card_amex_platinum",
+      "merchant": "Sample Merchant (edit or delete me)",
+      "value": 25,
+      "expires": "2026-12-31",
+      "activated": false,
+      "notes": "Card-linked offers are entered manually in v1."
+    }
+  ]
+}
