@@ -50,6 +50,7 @@ export default function App() {
 
   // ---- Mutations ----
   function upsertCard(card) {
+    const isNew = !card.id
     commit((() => {
       const c = card.id ? card : { ...card, id: uid('card') }
       const exists = state.cards.some((x) => x.id === c.id)
@@ -58,6 +59,7 @@ export default function App() {
         cards: exists ? state.cards.map((x) => (x.id === c.id ? c : x)) : [...state.cards, c]
       }
     })())
+    showToast(isNew ? 'Card added — now add its benefits' : 'Card saved')
   }
   function deleteCard(cardId) {
     commit({
@@ -128,6 +130,9 @@ export default function App() {
   // ---- Render helpers ----
   const flatList = sortByUrgency(filteredBenefits)
   const groups = groupByCard(state, filteredBenefits)
+  // When searching, hide cards with no matching benefits; otherwise show every
+  // card (including brand-new ones that have no benefits yet).
+  const visibleGroups = query ? groups.filter((g) => g.benefits.length > 0) : groups
 
   return (
     <div className="app">
@@ -165,23 +170,33 @@ export default function App() {
             <div className="empty">
               <div>No cards yet.</div>
               <button className="btn" onClick={loadSeed}>Load sample data</button>
+              <div className="hint" style={{ marginTop: 10 }}>…or tap ＋ to add your own card.</div>
             </div>
-          ) : flatList.length === 0 ? (
-            <div className="empty">No benefits match “{query}”.</div>
           ) : grouped ? (
-            groups.map((g) => (
-              <CardGroup
-                key={g.card?.id || 'orphan'}
-                group={g}
-                enriched={enriched}
-                collapsed={!!collapsed[g.card?.id]}
-                onToggleCollapse={() =>
-                  setCollapsed((c) => ({ ...c, [g.card?.id]: !c[g.card?.id] }))
-                }
-                onEditCard={(card) => setModal({ type: 'card', payload: card })}
-                onTapBenefit={(b) => setModal({ type: 'use', payload: b })}
-              />
-            ))
+            visibleGroups.length === 0 ? (
+              <div className="empty">No benefits match “{query}”.</div>
+            ) : (
+              visibleGroups.map((g) => (
+                <CardGroup
+                  key={g.card?.id || 'orphan'}
+                  group={g}
+                  enriched={enriched}
+                  collapsed={!!collapsed[g.card?.id]}
+                  onToggleCollapse={() =>
+                    setCollapsed((c) => ({ ...c, [g.card?.id]: !c[g.card?.id] }))
+                  }
+                  onEditCard={(card) => setModal({ type: 'card', payload: card })}
+                  onTapBenefit={(b) => setModal({ type: 'use', payload: b })}
+                  onAddBenefit={(cardId) => setModal({ type: 'benefit', defaultCardId: cardId })}
+                />
+              ))
+            )
+          ) : flatList.length === 0 ? (
+            <div className="empty">
+              {query
+                ? `No benefits match “${query}”.`
+                : 'No benefits yet — switch to “By card” to add some.'}
+            </div>
           ) : (
             flatList.map((b) => (
               <BenefitItem key={b.id} benefit={b} onTap={(x) => setModal({ type: 'use', payload: x })} />
@@ -286,7 +301,7 @@ export default function App() {
 }
 
 // ---- Collapsible card group with ROI line ----
-function CardGroup({ group, enriched, collapsed, onToggleCollapse, onEditCard, onTapBenefit }) {
+function CardGroup({ group, enriched, collapsed, onToggleCollapse, onEditCard, onTapBenefit, onAddBenefit }) {
   const { card, benefits } = group
   const roi = card ? cardROI(card, enriched) : null
   const groupRemaining = benefits.reduce((s, b) => s + (b.remainingAmount || 0), 0)
@@ -311,9 +326,21 @@ function CardGroup({ group, enriched, collapsed, onToggleCollapse, onEditCard, o
         )}
         <span className="chevron" onClick={onToggleCollapse}>{collapsed ? '▸' : '▾'}</span>
       </div>
-      {!collapsed && benefits.map((b) => (
-        <BenefitItem key={b.id} benefit={b} showCard={false} onTap={onTapBenefit} />
-      ))}
+      {!collapsed && (
+        <>
+          {benefits.map((b) => (
+            <BenefitItem key={b.id} benefit={b} showCard={false} onTap={onTapBenefit} />
+          ))}
+          {benefits.length === 0 && (
+            <div className="empty-benefits">No benefits yet.</div>
+          )}
+          {card && onAddBenefit && (
+            <button className="add-benefit-btn" onClick={() => onAddBenefit(card.id)}>
+              ＋ Add benefit
+            </button>
+          )}
+        </>
+      )}
     </div>
   )
 }

@@ -212,6 +212,23 @@ input, select, textarea {
 .roi-line b { color: var(--green); }
 .roi-line.under b { color: var(--amber); }
 .chevron { font-size: 14px; color: var(--text-dim); }
+.empty-benefits {
+  font-size: 13px;
+  color: var(--text-dim);
+  padding: 4px 4px 10px;
+}
+.add-benefit-btn {
+  width: 100%;
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--text-dim);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.add-benefit-btn:active { background: var(--bg-elev); color: var(--text); }
 
 /* ---- Offers ---- */
 .offer {
