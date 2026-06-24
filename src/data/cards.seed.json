@@ -1,5 +1,5 @@
 {
-  "_note": "Jake's cards. Benefit amounts/cadences reflect publicly listed 2026 terms (Amex Platinum & Gold per the 2025 refresh). Every benefit is flagged 'verify': true — confirm each against your own Amex/Chase app, since exact amounts, enrollment, and end dates vary by account. Set anniversaryMonth on the Sapphire Preferred and Southwest cards so cardmember-year resets land on the right date.",
+  "_note": "Jake's cards. Benefit amounts/cadences reflect publicly listed 2026 terms (Amex Platinum & Gold per the 2025 refresh). Every benefit is flagged 'verify': true — confirm each against your own Amex/Chase app, since exact amounts, enrollment, and end dates vary by account. All resets are on a calendar-year basis; the Sapphire Preferred hotel credit and Southwest anniversary points truly reset on your cardmember year, so switch those to 'cardmember year' + set the card's anniversary month if you want exact dates.",
   "version": 1,
   "cards": [
     {
@@ -224,12 +224,12 @@
       "id": "ben_csp_hotel",
       "cardId": "card_chase_csp",
       "name": "Hotel Credit",
-      "description": "$50 statement credit toward hotel stays booked through Chase Travel, each cardmember year.",
+      "description": "$50 statement credit toward hotel stays booked through Chase Travel.",
       "amount": 50,
       "cadence": "annual",
-      "resetBasis": "cardmember_year",
+      "resetBasis": "calendar",
       "usedThisPeriod": 0,
-      "notes": "Set this card's anniversary month so the reset date is right.",
+      "notes": "Actually resets on your cardmember year — switch this benefit to 'cardmember year' + set the card's anniversary month if you want the exact date.",
       "verify": true
     },
     {
@@ -263,9 +263,9 @@
       "description": "3,000 Rapid Rewards points post after each cardmember anniversary. Not a dollar credit — amount left at 0.",
       "amount": 0,
       "cadence": "annual",
-      "resetBasis": "cardmember_year",
+      "resetBasis": "calendar",
       "usedThisPeriod": 0,
-      "notes": "Set this card's anniversary month. Mark used once the points post each year.",
+      "notes": "Actually posts on your cardmember anniversary — switch to 'cardmember year' + set the card's anniversary month for the exact date. Mark used once the points post.",
       "verify": true
     }
   ],
