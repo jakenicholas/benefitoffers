@@ -84,7 +84,10 @@ function normalizeTransaction(t) {
     kind: t.kind === 'credit' ? 'credit' : 'spend',
     benefitId: t.benefitId || null,
     offerId: t.offerId || null,
-    ignored: Boolean(t.ignored)
+    ignored: Boolean(t.ignored),
+    // Source provenance: externalId dedupes repeated syncs; source marks origin.
+    externalId: t.externalId || null,
+    source: t.source || 'import'
   }
 }
 

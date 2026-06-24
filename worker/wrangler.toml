@@ -1,0 +1,19 @@
+name = "benefitoffers-sync"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Daily auto-refresh from SimpleFIN (08:00 UTC). Adjust as you like.
+[triggers]
+crons = ["0 8 * * *"]
+
+# D1 database for caching transactions + storing the SimpleFIN access URL.
+# Create it once with:  wrangler d1 create benefitoffers
+# then paste the returned database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "benefitoffers"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+# Secrets (set via `wrangler secret put <NAME>`, never commit them):
+#   API_TOKEN      - long random string; your app sends it as a Bearer token.
+#   ALLOWED_ORIGIN - your app origin, e.g. https://jakenicholas.github.io

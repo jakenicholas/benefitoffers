@@ -19,6 +19,8 @@ import OffersTab from './components/OffersTab.jsx'
 import UseBenefitSheet from './components/UseBenefitSheet.jsx'
 import SettingsSheet from './components/SettingsSheet.jsx'
 import ImportSheet from './components/ImportSheet.jsx'
+import SyncSheet from './components/SyncSheet.jsx'
+import { loadSyncConfig, isConfigured, getSnapshot, buildSyncedTransactions } from './lib/sync.js'
 
 export default function App() {
   const [state, setState] = useState(loadState)
@@ -41,6 +43,23 @@ export default function App() {
   // period has rolled over since data was last written.
   useEffect(() => {
     commit(state)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // If bank sync is configured, pull the worker's cached snapshot on open and
+  // merge anything new — so usage stays fresh without a manual sync.
+  useEffect(() => {
+    const cfg = loadSyncConfig()
+    if (!isConfigured(cfg)) return
+    getSnapshot(cfg)
+      .then((snap) => {
+        const newTxns = buildSyncedTransactions(snap, cfg.accountMap || {}, state)
+        if (newTxns.length) {
+          addTransactions(newTxns, state)
+          showToast(`Auto-synced — ${newTxns.length} new`)
+        }
+      })
+      .catch(() => {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -97,8 +116,28 @@ export default function App() {
     commit({ ...state, offers: state.offers.map((o) => (o.id === offer.id ? { ...o, activated: !o.activated } : o)) })
   }
 
-  // Import parsed + suggested transaction rows for one card, then derive
-  // benefit usage from the matched spend.
+  // Merge a batch of (already card-assigned + suggested) transactions, mark any
+  // matched offers redeemed, and re-derive benefit usage. Shared by file import
+  // and bank sync. Returns the count added. `base` lets the sync path pass the
+  // freshest state when called outside React's batching.
+  function addTransactions(txns, base = state) {
+    if (!txns.length) return 0
+    const redeemed = new Map()
+    for (const t of txns) {
+      if (t.offerId && t.kind === 'spend' && !redeemed.has(t.offerId)) redeemed.set(t.offerId, t.date)
+    }
+    const next = {
+      ...base,
+      transactions: [...(base.transactions || []), ...txns],
+      offers: base.offers.map((o) =>
+        redeemed.has(o.id) ? { ...o, redeemedDate: o.redeemedDate || redeemed.get(o.id), activated: true } : o
+      )
+    }
+    commit(recomputeUsage(next, new Date()))
+    return txns.length
+  }
+
+  // Import parsed + suggested transaction rows for one card (file importer).
   function importTransactions(cardId, rows) {
     const newTxns = rows.map((r) => ({
       cardId,
@@ -110,18 +149,7 @@ export default function App() {
       offerId: r.offerId || null,
       ignored: false
     }))
-    const redeemed = new Map()
-    for (const t of newTxns) {
-      if (t.offerId && t.kind === 'spend' && !redeemed.has(t.offerId)) redeemed.set(t.offerId, t.date)
-    }
-    const next = {
-      ...state,
-      transactions: [...(state.transactions || []), ...newTxns],
-      offers: state.offers.map((o) =>
-        redeemed.has(o.id) ? { ...o, redeemedDate: o.redeemedDate || redeemed.get(o.id), activated: true } : o
-      )
-    }
-    commit(recomputeUsage(next, new Date()))
+    addTransactions(newTxns)
     const matched = newTxns.filter((t) => t.benefitId).length
     showToast(`Imported ${newTxns.length} — ${matched} matched to benefits`)
   }
@@ -274,8 +302,23 @@ export default function App() {
           </button>
           <button className="btn ghost" style={{ marginTop: 8 }}
             onClick={() => setModal(state.cards.length ? { type: 'import' } : { type: 'card' })}>
-            ⤓ Import transactions (sync usage)
+            ⤓ Import transactions (file)
           </button>
+          <button className="btn ghost" style={{ marginTop: 8 }}
+            onClick={() => setModal(state.cards.length ? { type: 'sync' } : { type: 'card' })}>
+            ⟳ Bank sync (auto)
+          </button>
+        </Modal>
+      )}
+
+      {modal?.type === 'sync' && (
+        <Modal title="Bank sync" onClose={() => setModal(null)}>
+          <SyncSheet
+            cards={state.cards}
+            state={state}
+            onApply={(txns) => addTransactions(txns)}
+            onToast={showToast}
+          />
         </Modal>
       )}
 
@@ -342,6 +385,7 @@ export default function App() {
             onClear={clearAll}
             onToast={showToast}
             onImport={() => setModal({ type: 'import' })}
+            onSync={() => setModal({ type: 'sync' })}
             onClearTransactions={clearTransactions}
             onClose={() => setModal(null)}
           />

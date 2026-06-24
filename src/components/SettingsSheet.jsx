@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { exportJSON, importJSON } from '../lib/storage.js'
 
-export default function SettingsSheet({ state, onReplaceState, onLoadSeed, onClear, onToast, onClose, onImport, onClearTransactions }) {
+export default function SettingsSheet({ state, onReplaceState, onLoadSeed, onClear, onToast, onClose, onImport, onSync, onClearTransactions }) {
   const fileRef = useRef(null)
   const [error, setError] = useState('')
 
@@ -53,8 +53,11 @@ export default function SettingsSheet({ state, onReplaceState, onLoadSeed, onCle
       {error && <div className="hint" style={{ color: 'var(--red)' }}>{error}</div>}
 
       <div className="section-label" style={{ marginTop: 18 }}>Sync usage from transactions</div>
-      <button className="btn secondary" onClick={() => { onImport(); }}>
-        ⤓ Import transactions…
+      <button className="btn secondary" onClick={() => { onSync(); }}>
+        ⟳ Bank sync (auto, Amex/Chase)…
+      </button>
+      <button className="btn secondary" style={{ marginTop: 8 }} onClick={() => { onImport(); }}>
+        ⤓ Import file (any card, incl. Apple)…
       </button>
       <div className="hint">
         {state.transactions?.length
