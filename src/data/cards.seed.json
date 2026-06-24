@@ -1,5 +1,5 @@
 {
-  "_note": "Jake's cards. Benefit amounts/cadences reflect publicly listed 2026 terms (Amex Platinum & Gold per the 2025 refresh). Every benefit is flagged 'verify': true — confirm each against your own Amex/Chase app, since exact amounts, enrollment, and end dates vary by account. All resets are on a calendar-year basis; the Sapphire Preferred hotel credit and Southwest anniversary points truly reset on your cardmember year, so switch those to 'cardmember year' + set the card's anniversary month if you want exact dates.",
+  "_note": "Jake's cards. Benefit amounts/cadences reflect publicly listed 2026 terms (Amex Platinum & Gold per the 2025 refresh). Every benefit is flagged 'verify': true — confirm each against your own Amex/Chase app, since exact amounts, enrollment, and end dates vary by account. All resets are on a calendar-year basis; the Sapphire Preferred hotel credit and Southwest anniversary points truly reset on your cardmember year, so switch those to 'cardmember year' + set the card's anniversary month if you want exact dates. Apple Card has no annual credits to track and cannot be auto-aggregated (Goldman Sachs blocks it) — import its transactions via Wallet → Export, and assign them manually.",
   "version": 1,
   "cards": [
     {
@@ -49,6 +49,14 @@
       "annualFee": 69,
       "last4": "",
       "anniversaryMonth": null
+    },
+    {
+      "id": "card_apple",
+      "name": "Apple Card",
+      "issuer": "Goldman Sachs",
+      "annualFee": 0,
+      "last4": "",
+      "anniversaryMonth": null
     }
   ],
   "benefits": [
@@ -62,7 +70,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "resy"
+      ]
     },
     {
       "id": "ben_plat_lululemon",
@@ -74,7 +85,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "lululemon"
+      ]
     },
     {
       "id": "ben_plat_hotel",
@@ -86,7 +100,14 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "amex travel",
+        "american express travel",
+        "fine hotels",
+        "fhr",
+        "hotel collection"
+      ]
     },
     {
       "id": "ben_plat_uber",
@@ -98,7 +119,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "December is $35 (extra $20 bonus).",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "uber"
+      ]
     },
     {
       "id": "ben_plat_uberone",
@@ -110,7 +134,11 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "uber one",
+        "uberone"
+      ]
     },
     {
       "id": "ben_plat_entertainment",
@@ -122,7 +150,20 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "disney",
+        "hulu",
+        "espn",
+        "peacock",
+        "paramount",
+        "youtube",
+        "nytimes",
+        "new york times",
+        "wall street journal",
+        "wsj",
+        "audible"
+      ]
     },
     {
       "id": "ben_plat_walmart",
@@ -134,7 +175,12 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "walmart plus",
+        "walmart+",
+        "walmartplus"
+      ]
     },
     {
       "id": "ben_plat_equinox",
@@ -146,7 +192,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "Only worth tracking if you have/want Equinox.",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "equinox"
+      ]
     },
     {
       "id": "ben_plat_oura",
@@ -158,7 +207,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "One-time-ish; delete if not buying an Oura Ring.",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "oura"
+      ]
     },
     {
       "id": "ben_plat_clear",
@@ -170,7 +222,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "Confirm this is still offered/at this amount after the 2025 refresh.",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "clear"
+      ]
     },
     {
       "id": "ben_gold_uber",
@@ -182,7 +237,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "uber"
+      ]
     },
     {
       "id": "ben_gold_dining",
@@ -194,7 +252,15 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "grubhub",
+        "seamless",
+        "five guys",
+        "cheesecake",
+        "buffalo wild wings",
+        "wonder"
+      ]
     },
     {
       "id": "ben_gold_dunkin",
@@ -206,7 +272,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "dunkin"
+      ]
     },
     {
       "id": "ben_gold_resy",
@@ -218,7 +287,10 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "resy"
+      ]
     },
     {
       "id": "ben_csp_hotel",
@@ -230,7 +302,11 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "Actually resets on your cardmember year — switch this benefit to 'cardmember year' + set the card's anniversary month if you want the exact date.",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "chase travel",
+        "chasetravel"
+      ]
     },
     {
       "id": "ben_csp_doordash",
@@ -242,7 +318,11 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "Confirm the monthly promo is still active on your account/year.",
-      "verify": true
+      "verify": true,
+      "matchKeywords": [
+        "doordash",
+        "dashmart"
+      ]
     },
     {
       "id": "ben_freedom_5pct",
@@ -254,7 +334,8 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "This tracks the activate-and-max reminder, not a statement credit. Categories change quarterly.",
-      "verify": true
+      "verify": true,
+      "matchKeywords": []
     },
     {
       "id": "ben_sw_anniversary",
@@ -266,7 +347,8 @@
       "resetBasis": "calendar",
       "usedThisPeriod": 0,
       "notes": "Actually posts on your cardmember anniversary — switch to 'cardmember year' + set the card's anniversary month for the exact date. Mark used once the points post.",
-      "verify": true
+      "verify": true,
+      "matchKeywords": []
     }
   ],
   "offers": []

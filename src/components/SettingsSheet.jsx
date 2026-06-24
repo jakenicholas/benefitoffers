@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { exportJSON, importJSON } from '../lib/storage.js'
 
-export default function SettingsSheet({ state, onReplaceState, onLoadSeed, onClear, onToast, onClose }) {
+export default function SettingsSheet({ state, onReplaceState, onLoadSeed, onClear, onToast, onClose, onImport, onClearTransactions }) {
   const fileRef = useRef(null)
   const [error, setError] = useState('')
 
@@ -51,6 +51,30 @@ export default function SettingsSheet({ state, onReplaceState, onLoadSeed, onCle
       </button>
       <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={onPickFile} />
       {error && <div className="hint" style={{ color: 'var(--red)' }}>{error}</div>}
+
+      <div className="section-label" style={{ marginTop: 18 }}>Sync usage from transactions</div>
+      <button className="btn secondary" onClick={() => { onImport(); }}>
+        ⤓ Import transactions…
+      </button>
+      <div className="hint">
+        {state.transactions?.length
+          ? `${state.transactions.length} transactions imported. Benefit usage is derived from matched spend.`
+          : 'Import a CSV/OFX export from Amex, Chase, or Apple Card to auto-fill how much of each benefit you’ve used.'}
+      </div>
+      {state.transactions?.length > 0 && (
+        <button
+          className="btn ghost"
+          style={{ marginTop: 8 }}
+          onClick={() => {
+            if (confirm('Remove all imported transactions? Benefit amounts already computed stay until you edit them.')) {
+              onClearTransactions()
+              onToast('Transactions cleared')
+            }
+          }}
+        >
+          Clear imported transactions
+        </button>
+      )}
 
       <div className="section-label" style={{ marginTop: 18 }}>Seed data</div>
       <button

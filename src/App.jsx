@@ -6,6 +6,7 @@ import {
   enrichBenefits, sortByUrgency, groupByCard, cardROI,
   totalRemaining, countUrgent, searchBenefits, searchOffers
 } from './lib/selectors.js'
+import { recomputeUsage } from './lib/matching.js'
 import { money } from './lib/format.js'
 import seed from './data/cards.seed.json'
 
@@ -17,6 +18,7 @@ import OfferForm from './components/OfferForm.jsx'
 import OffersTab from './components/OffersTab.jsx'
 import UseBenefitSheet from './components/UseBenefitSheet.jsx'
 import SettingsSheet from './components/SettingsSheet.jsx'
+import ImportSheet from './components/ImportSheet.jsx'
 
 export default function App() {
   const [state, setState] = useState(loadState)
@@ -93,6 +95,39 @@ export default function App() {
   }
   function toggleOffer(offer) {
     commit({ ...state, offers: state.offers.map((o) => (o.id === offer.id ? { ...o, activated: !o.activated } : o)) })
+  }
+
+  // Import parsed + suggested transaction rows for one card, then derive
+  // benefit usage from the matched spend.
+  function importTransactions(cardId, rows) {
+    const newTxns = rows.map((r) => ({
+      cardId,
+      date: r.date,
+      description: r.description,
+      amount: r.amount,
+      kind: r.kind,
+      benefitId: r.benefitId || null,
+      offerId: r.offerId || null,
+      ignored: false
+    }))
+    const redeemed = new Map()
+    for (const t of newTxns) {
+      if (t.offerId && t.kind === 'spend' && !redeemed.has(t.offerId)) redeemed.set(t.offerId, t.date)
+    }
+    const next = {
+      ...state,
+      transactions: [...(state.transactions || []), ...newTxns],
+      offers: state.offers.map((o) =>
+        redeemed.has(o.id) ? { ...o, redeemedDate: o.redeemedDate || redeemed.get(o.id), activated: true } : o
+      )
+    }
+    commit(recomputeUsage(next, new Date()))
+    const matched = newTxns.filter((t) => t.benefitId).length
+    showToast(`Imported ${newTxns.length} — ${matched} matched to benefits`)
+  }
+
+  function clearTransactions() {
+    commit({ ...state, transactions: [] })
   }
 
   function loadSeed() {
@@ -237,6 +272,22 @@ export default function App() {
           <button className="btn secondary" style={{ marginTop: 8 }} onClick={() => setModal({ type: 'offer' })}>
             New offer
           </button>
+          <button className="btn ghost" style={{ marginTop: 8 }}
+            onClick={() => setModal(state.cards.length ? { type: 'import' } : { type: 'card' })}>
+            ⤓ Import transactions (sync usage)
+          </button>
+        </Modal>
+      )}
+
+      {modal?.type === 'import' && (
+        <Modal title="Import transactions" onClose={() => setModal(null)}>
+          <ImportSheet
+            cards={state.cards}
+            benefits={state.benefits}
+            offers={state.offers}
+            onImport={importTransactions}
+            onClose={() => setModal(null)}
+          />
         </Modal>
       )}
 
@@ -290,6 +341,8 @@ export default function App() {
             onLoadSeed={loadSeed}
             onClear={clearAll}
             onToast={showToast}
+            onImport={() => setModal({ type: 'import' })}
+            onClearTransactions={clearTransactions}
             onClose={() => setModal(null)}
           />
         </Modal>

@@ -120,6 +120,15 @@ export function computePeriodEnd(cadence, resetBasis, anniversaryMonth = 1, now 
   return boundary
 }
 
+// Start of the current period (the most recent reset boundary, inclusive).
+// Returns a Date at local midnight, or null for one_time benefits.
+export function computePeriodStart(cadence, resetBasis, anniversaryMonth = 1, now = new Date()) {
+  const end = computePeriodEnd(cadence, resetBasis, anniversaryMonth, now)
+  if (!end) return null
+  const months = monthsPerPeriod(cadence)
+  return ymd(end.getFullYear(), end.getMonth() - months, 1)
+}
+
 // Convenience: derive everything we need to display for a benefit given the
 // owning card (for anniversaryMonth) and a reference time.
 export function benefitPeriodInfo(benefit, card, now = new Date()) {

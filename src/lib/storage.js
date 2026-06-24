@@ -18,7 +18,7 @@ export function uid(prefix = 'id') {
 // ---- Empty / default state ----------------------------------------------
 
 export function emptyState() {
-  return { version: SCHEMA_VERSION, cards: [], benefits: [], offers: [] }
+  return { version: SCHEMA_VERSION, cards: [], benefits: [], offers: [], transactions: [] }
 }
 
 // ---- Load / save ---------------------------------------------------------
@@ -57,7 +57,8 @@ export function normalizeState(input, now = new Date()) {
     version: SCHEMA_VERSION,
     cards: Array.isArray(input?.cards) ? input.cards.map(normalizeCard) : [],
     benefits: Array.isArray(input?.benefits) ? input.benefits : [],
-    offers: Array.isArray(input?.offers) ? input.offers : []
+    offers: Array.isArray(input?.offers) ? input.offers : [],
+    transactions: Array.isArray(input?.transactions) ? input.transactions.map(normalizeTransaction) : []
   }
 
   const cardById = Object.fromEntries(state.cards.map((c) => [c.id, c]))
@@ -71,6 +72,20 @@ export function normalizeState(input, now = new Date()) {
   state.offers = state.offers.map(normalizeOffer)
 
   return state
+}
+
+function normalizeTransaction(t) {
+  return {
+    id: t.id || uid('txn'),
+    cardId: t.cardId || null,
+    date: t.date || null,
+    description: t.description || '',
+    amount: Math.abs(Number(t.amount) || 0),
+    kind: t.kind === 'credit' ? 'credit' : 'spend',
+    benefitId: t.benefitId || null,
+    offerId: t.offerId || null,
+    ignored: Boolean(t.ignored)
+  }
 }
 
 function normalizeCard(c) {
@@ -99,7 +114,8 @@ function normalizeBenefit(b) {
     usedThisPeriod: Number(b.usedThisPeriod) || 0,
     currentPeriodEnd: b.currentPeriodEnd || null,
     notes: b.notes || '',
-    verify: Boolean(b.verify)
+    verify: Boolean(b.verify),
+    matchKeywords: Array.isArray(b.matchKeywords) ? b.matchKeywords.filter(Boolean) : []
   }
 }
 
@@ -111,6 +127,7 @@ function normalizeOffer(o) {
     value: o.value === '' || o.value === null || o.value === undefined ? null : Number(o.value),
     expires: o.expires || null,
     activated: Boolean(o.activated),
+    redeemedDate: o.redeemedDate || null,
     notes: o.notes || ''
   }
 }
@@ -168,7 +185,8 @@ function stripDerived(state) {
   return {
     cards: state.cards,
     benefits: state.benefits.map(({ periodsPerYear: _pp, ...rest }) => rest),
-    offers: state.offers
+    offers: state.offers,
+    transactions: state.transactions || []
   }
 }
 
